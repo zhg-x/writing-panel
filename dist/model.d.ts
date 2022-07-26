@@ -30,6 +30,14 @@ export declare class PanelConfigOption {
     imgType?: ImgType;
     /** 鼠标移动到面板区域时的光标样式 */
     cursorStyle?: any;
+    /** 浏览器窗口改变时是否重置面板，默认为true */
+    autoResize?: boolean;
+    /**
+     * <p>是否启用设备像素比 window.devicePixelRatio</p>
+     * <p>如果开始此选项，则在设置画布/面板的width和height属性值时，需要根据设备像素比进行计算</p>
+     * <p>默认为false</p>
+     */
+    enableDPR?: boolean;
 }
 /**
  * 面板配置选项类
@@ -57,6 +65,10 @@ export declare class PanelConfig {
     private _cursorStyle?;
     /** 设备的物理像素分辨率与CSS 像素分辨率之比 */
     private _scale;
+    /** 浏览器窗口改变时是否重置面板 */
+    private readonly _autoResize;
+    /** 启用设备像素比 window.devicePixelRatio */
+    private readonly _enableDPR?;
     constructor(options: PanelConfigOption);
     get scale(): number;
     set scale(value: number);
@@ -88,11 +100,12 @@ export declare class PanelConfig {
     get imageMimeType(): any;
     set imageMimeType(value: any);
     get cursorStyle(): string;
-    /**
-     * 设置光标样式
-     * @param value
-     */
+    /** 设置光标样式 */
     set cursorStyle(value: string);
+    /** 启用浏览器窗口缩放时重置面板功能 */
+    get autoResize(): boolean;
+    /** 启用设别像素比 window.devicePixelRatio */
+    get enableDPR(): boolean;
 }
 /**
  * 触点

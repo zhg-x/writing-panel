@@ -28,6 +28,13 @@ export declare class WritingPanel {
     constructor(canvas: HTMLCanvasElement, options: PanelConfigOption);
     /** 初始化面板 */
     private _initPanel;
+    /**
+     * 重置画布
+     * <ul>
+     *     <li>1.初始化时需要设置画布</li>
+     *     <li>2.当开启autoResize且浏览器窗口大小变化时需要重置画布</li>
+     * </ul>
+     */
     private _resetCanvas;
     /** 设置事件监听 */
     private _setEventListeners;

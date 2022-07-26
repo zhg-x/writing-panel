@@ -36,7 +36,6 @@ export function isMobilePlatform() {
  * @param eventNames 事件名称数组
  */
 export function filterEvents(eventNames) {
-    console.log(isMobilePlatform());
     return eventNames.filter(d => isMobilePlatform() ? d.startsWith('touch') : d.startsWith('mouse'));
 }
 /**

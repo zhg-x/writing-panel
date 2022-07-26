@@ -17,20 +17,32 @@ export class WritingPanel {
         this._lineIndex = 0;
         /** 面板初始化标志 */
         this._initialized = false;
+        /**
+         * 重置画布
+         * <ul>
+         *     <li>1.初始化时需要设置画布</li>
+         *     <li>2.当开启autoResize且浏览器窗口大小变化时需要重置画布</li>
+         * </ul>
+         */
         this._resetCanvas = () => {
-            console.log(`缩放前比例：${this._panelConfig.scale}、缩放后比例：${window.devicePixelRatio}`);
-            if (this._initialized && this._panelConfig.scale === window.devicePixelRatio)
+            if (this._initialized && (!this._panelConfig.enableDPR ||
+                this._panelConfig.enableDPR && this._panelConfig.scale === window.devicePixelRatio)) {
                 return;
-            this._panelConfig.scale = window.devicePixelRatio;
+            }
+            if (this._panelConfig.enableDPR) {
+                this._panelConfig.scale = window.devicePixelRatio;
+            }
             this._canvas.width = this._panelConfig.width; // 设置写字板的宽度和高度
             this._canvas.height = this._panelConfig.height;
             this._context.scale(this._panelConfig.scale, this._panelConfig.scale); // 设置缩放
             this.setPanelBgColor(); // 初始化时设置写字板背景色
             this.setPanelCursorStyle();
+            this._initialized && console.log(`检测到窗口大小改变，面板已重置.`);
+            this._initialized = true;
         };
         /** 当窗口被调整大小时重置画布 */
         this._windowOnResize = () => {
-            this._resetCanvas();
+            this._panelConfig.autoResize && this._resetCanvas(); // 当开启autoResize时，窗口大小改变会重置面板
         };
         /**
          * [鼠标按下|屏幕被触摸]事件方法--准备进行书写
@@ -356,11 +368,12 @@ export class WritingPanel {
     _initPanel() {
         this._line = new Line();
         this._lineRecord = new LineRecord();
-        window.addEventListener('resize', this._windowOnResize);
-        this._resetCanvas();
+        if (this._panelConfig.autoResize) {
+            window.addEventListener('resize', this._windowOnResize);
+        }
+        this._resetCanvas(); // 初始化时设置面板信息
         this._setEventListeners();
         console.log(`写字板初始化完毕`);
-        this._initialized = true;
     }
     /** 设置事件监听 */
     _setEventListeners() {

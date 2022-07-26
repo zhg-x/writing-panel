@@ -21,7 +21,6 @@ export class PanelConfig {
         /** 设备的物理像素分辨率与CSS 像素分辨率之比 */
         this._scale = 1;
         const _options = isObject(options) ? options : {};
-        this.scale = window.devicePixelRatio;
         this.height = toNumber(_options.height);
         this.width = toNumber(_options.width);
         this.panelBgColor = _options.panelBgColor;
@@ -30,6 +29,9 @@ export class PanelConfig {
         this.lineJoin = _options.lineJoin || 'round';
         this.imgType = _options.imgType || 'png';
         this.cursorStyle = _options.cursorStyle;
+        this._autoResize = _options.autoResize !== false;
+        this._enableDPR = !!_options.enableDPR;
+        this.scale = this.enableDPR ? window.devicePixelRatio : 1;
     }
     get scale() {
         return this._scale || 1;
@@ -107,12 +109,17 @@ export class PanelConfig {
     get cursorStyle() {
         return this._cursorStyle || 'crosshair';
     }
-    /**
-     * 设置光标样式
-     * @param value
-     */
+    /** 设置光标样式 */
     set cursorStyle(value) {
         this._cursorStyle = value || 'crosshair';
+    }
+    /** 启用浏览器窗口缩放时重置面板功能 */
+    get autoResize() {
+        return !!this._autoResize;
+    }
+    /** 启用设别像素比 window.devicePixelRatio */
+    get enableDPR() {
+        return !!this._enableDPR;
     }
 }
 /**

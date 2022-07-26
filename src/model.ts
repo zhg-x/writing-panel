@@ -37,6 +37,14 @@ export class PanelConfigOption {
     imgType?: ImgType;
     /** 鼠标移动到面板区域时的光标样式 */
     cursorStyle?: any;
+    /** 浏览器窗口改变时是否重置面板，默认为true */
+    autoResize?: boolean;
+    /**
+     * <p>是否启用设备像素比 window.devicePixelRatio</p>
+     * <p>如果开始此选项，则在设置画布/面板的width和height属性值时，需要根据设备像素比进行计算</p>
+     * <p>默认为false</p>
+     */
+    enableDPR?: boolean;
 }
 
 /**
@@ -66,10 +74,13 @@ export class PanelConfig {
     private _cursorStyle?: string;
     /** 设备的物理像素分辨率与CSS 像素分辨率之比 */
     private _scale: number = 1;
+    /** 浏览器窗口改变时是否重置面板 */
+    private readonly _autoResize: boolean;
+    /** 启用设备像素比 window.devicePixelRatio */
+    private readonly _enableDPR?: boolean;
 
     constructor(options: PanelConfigOption) {
         const _options = isObject(options) ? options : {};
-        this.scale = window.devicePixelRatio;
         this.height = toNumber(_options.height);
         this.width = toNumber(_options.width);
         this.panelBgColor = _options.panelBgColor;
@@ -78,6 +89,9 @@ export class PanelConfig {
         this.lineJoin = _options.lineJoin || 'round';
         this.imgType = _options.imgType || 'png';
         this.cursorStyle = _options.cursorStyle;
+        this._autoResize = _options.autoResize !== false;
+        this._enableDPR = !!_options.enableDPR;
+        this.scale = this.enableDPR ? window.devicePixelRatio : 1;
     }
 
     get scale(): number {
@@ -177,12 +191,19 @@ export class PanelConfig {
         return this._cursorStyle || 'crosshair';
     }
 
-    /**
-     * 设置光标样式
-     * @param value
-     */
+    /** 设置光标样式 */
     set cursorStyle(value: string) {
         this._cursorStyle = value || 'crosshair';
+    }
+
+    /** 启用浏览器窗口缩放时重置面板功能 */
+    get autoResize(): boolean {
+        return !!this._autoResize;
+    }
+
+    /** 启用设别像素比 window.devicePixelRatio */
+    get enableDPR(): boolean {
+        return !!this._enableDPR;
     }
 }
 
