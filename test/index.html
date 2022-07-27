@@ -5,44 +5,55 @@
     <meta charset="utf-8">
     <title>写字板功能测试</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <script defer="defer" src="../dist/bundle.js" onload="setCanvas()"></script>
+    <script defer="defer" src="../dist/bundle.js" onload="_initWritingPanel()"></script>
 </head>
 <style>
-    div.container {
-        width: 800px;
-        height: 320px;
-        padding: 10px;
-        /*overflow: hidden;*/
-    }
-
-    canvas.canvas-item {
-        border: 1px solid #bdb9b9;
-        border-radius: 4px;
-        cursor: crosshair;
-    }
-
     .flex-container {
         width: 85%;
-        margin-top: 15px;
+        margin-top: 10px;
         padding: 12px 10px;
         display: flex;
         flex-wrap: wrap;
         border: 1px solid rgb(204, 201, 201);
         border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .canvas-container {
+        height: 300px;
+    }
+
+    canvas.canvas-item {
+        border: 1px solid #bceaf4;
+        border-radius: 4px;
+        cursor: crosshair;
     }
 
     .flex-container.condition>div {
-        margin-left: 5px;
+        margin: auto 6px;
     }
 
     .flex-container>button {
         margin: 6px 6px;
         width: 120px;
     }
+
+    div.tip {
+        width: 85%;
+        margin: 8px 0;
+        padding: 12px 10px;
+        border: 1px solid #c9edfa;
+        border-radius: 4px;
+        background-color: #c5f8f8;
+    }
+
+    div.buttons {
+        margin-top: 2px;
+    }
 </style>
 
 <body id="body">
-    <div class="container border" id="canvas-container">
+    <div class="flex-container canvas-container" id="canvas-container">
         <canvas id="canvas-0" class="canvas-item" width="600" height="400"></canvas>
     </div>
     <div class="flex-container condition">
@@ -50,13 +61,20 @@
             写字板背景色：<input type="color" name="panelBgColor" id="panelBgColor"><br>
         </div>
         <div>
-            选择画笔颜色：<input type="color" name="penColor" id="penColor"><br>
+            选择画笔颜色：<input type="color" name="lineColor" id="lineColor"><br>
+        </div>
+        <div>
+            线条宽度：<input type="number" name="lineWidth" min="1" id="lineWidth">
         </div>
     </div>
-    <div class="flex-container">
-        <button onclick="getBase64()">Base64</button>
+    <div class="tip">
+        提示：请打开控制台查看输出的日志信息
+    </div>
+    <div class="flex-container buttons">
+        <button onclick="getBase64()">打印Base64</button>
         <button onclick="changeWidth(true)">宽度增加</button>
         <button onclick="changeWidth(false)">宽度减少</button>
+        <button onclick="restorePanelWh()">还原宽高</button>
         <button onclick="saveImgFile()">保存图片</button>
         <button onclick="downloadImgFile()">下载图片</button>
         <button onclick="getImgBlob()">打印Blob对象</button>
@@ -70,47 +88,59 @@
 
     <script>
         var writingPanel; // 写字板实例对象
-        const penColor = document.getElementById('penColor');
-        const panelBgColor = document.getElementById('panelBgColor');
+        const lineColorElement = document.getElementById('lineColor');
+        const panelBgColorElement = document.getElementById('panelBgColor');
+        const lineWidthElement = document.getElementById('lineWidth');
+        lineWidthElement.value = 3; // 设置线条默认值
 
-        function setCanvas() {
+        // 初始化写字板
+        function _initWritingPanel() {
             const WritingPanel = window.writingPanel.WritingPanel;
             const canvas = document.getElementById("canvas-0");
             writingPanel = new WritingPanel(canvas, {
                 height: 240,
                 width: '600',
-                lineWidth: 5,
+                lineWidth: lineWidthElement.value,
                 imgType: 'png',
                 autoResize: '',
                 enableDPR: ''
                 // panelBgColor: 'red'
             });
-            penColor.onchange = () => {
-                writingPanel.setLineColor(penColor.value)
+            lineColorElement.onchange = () => {
+                writingPanel.setLineColor(lineColorElement.value);
+                console.log('线条颜色已修改：', lineColorElement.value);
             };
-            panelBgColor.onchange = () => {
-                writingPanel.setPanelBgColor(panelBgColor.value, true)
+            panelBgColorElement.onchange = () => {
+                writingPanel.setPanelBgColor(panelBgColorElement.value, true);
+                console.log('面板背景颜色已修改：', panelBgColorElement.value);
             };
-            // writingPanel.forbidScrolling(document.getElementById('body'));
+            lineWidthElement.onchange = () => {
+                writingPanel.setLineWidth(lineWidthElement.value);
+                console.log('线条宽度颜色已修改：', lineWidthElement.value);
+            }
         }
 
         function getBase64() {
-            console.log(writingPanel.setLineWidth(5));
-            // console.log(writingPanel.clear());
             console.log(writingPanel.getBase64())
         }
 
         function changeWidth(flag) {
+            const height = parseFloat(writingPanel.getPanelWidth());
             if (flag) {
-                writingPanel.setPanelWidth('850px');
+                writingPanel.setPanelWidth(height + 10);
             } else {
-                writingPanel.setPanelWidth('500px');
+                writingPanel.setPanelWidth(height - 10);
             }
+        }
+
+        function restorePanelWh() {
+            writingPanel.restorePanelWH();
         }
 
         function saveImgFile(fileName) {
             writingPanel.saveImgFile(fileName);
         }
+
         function downloadImgFile(fileName) {
             writingPanel.downloadImgFile(fileName);
         }
@@ -118,23 +148,29 @@
         function getImgBlob() {
             console.log(writingPanel.getImgBlobOrFile());
         }
+
         function getImgFile() {
             console.log(writingPanel.getImgBlobOrFile());
         }
+
         function clearPanel() {
             writingPanel.clearPanel();
         }
+
         // 撤销
         function revoke() {
             writingPanel.revoke();
         }
+
         // 恢复
         function recover() {
             writingPanel.recover();
         }
+
         function destroy() {
             writingPanel.destroy();
         }
+
         function panelIsEmpty() {
             alert(writingPanel.isEmpty())
         }

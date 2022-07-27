@@ -81,7 +81,7 @@ export declare class WritingPanel {
     /**
      * 获取面板的高度
      * <p>获取计算后的综合的高度值</p>
-     * @returns {string}
+     * @returns {string} 单位：px
      */
     getPanelHeight: () => string;
     /**
@@ -93,9 +93,16 @@ export declare class WritingPanel {
     /**
      * 获取面板的宽度
      * <p>获取计算后的综合的宽度值</p>
-     * @returns {string}
+     * @returns {string} 单位：px
      */
     getPanelWidth: () => string;
+    /**
+     * <p>还原面板原始宽高比例
+     * <p>在设置了面板的宽度或高度后，可以使用此方法对面板宽度或高度进行还原</p>
+     * @param rstWidth {boolean} 还原面板宽度，默认为true
+     * @param rstHeight {boolean} 还原面板高度，默认为true
+     */
+    restorePanelWH: (rstWidth?: boolean, rstHeight?: boolean) => void;
     /**
      * 设置线条宽度
      * @param width {number} 线条宽度

@@ -86,6 +86,7 @@ export class WritingPanel {
          */
         this.setPanelHeight = (height) => {
             this._canvas.style.height = (height || 0) + 'px';
+            this._canvas.style.width = this.getPanelWidth(); // 保持现有宽度不变
             return this;
         };
         /**
@@ -103,15 +104,26 @@ export class WritingPanel {
          */
         this.setPanelWidth = (width) => {
             this._canvas.style.width = (width || 0) + 'px';
+            this._canvas.style.height = this.getPanelHeight(); // 保持现有高度不变
             return this;
         };
         /**
          * 获取面板的宽度
          * <p>获取计算后的综合的宽度值</p>
-         * @returns {string}
+         * @returns {string} 单位：px
          */
         this.getPanelWidth = () => {
             return window.getComputedStyle(this._canvas).getPropertyValue('width');
+        };
+        /**
+         * <p>还原面板原始宽高比例
+         * <p>在设置了面板的宽度或高度后，可以使用此方法对面板宽度或高度进行还原</p>
+         * @param rstWidth {boolean} 还原面板宽度，默认为true
+         * @param rstHeight {boolean} 还原面板高度，默认为true
+         */
+        this.restorePanelWH = (rstWidth = true, rstHeight = true) => {
+            rstWidth && (this._canvas.style.width = '');
+            rstHeight && (this._canvas.style.height = '');
         };
         /**
          * 设置线条宽度
