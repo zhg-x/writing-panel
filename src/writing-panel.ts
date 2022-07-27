@@ -158,8 +158,8 @@ export class WritingPanel {
         }
         const rect = this._canvas.getBoundingClientRect();
         const point: Point = {
-            x: (evt as any).clientX - rect.left,
-            y: (evt as any).clientY - rect.top
+            x: ((evt as any).clientX - rect.left) * (this._canvas.width / parseFloat(this.getPanelWidth())),
+            y: ((evt as any).clientY - rect.top) * (this._canvas.height / parseFloat(this.getPanelHeight()))
         };
         point.x = point.x / this._panelConfig.scale;
         point.y = point.y / this._panelConfig.scale;
@@ -244,7 +244,7 @@ export class WritingPanel {
      * @returns {string}
      */
     getPanelHeight = (): string => {
-        return window.getComputedStyle(this._canvas).getPropertyPriority('height');
+        return window.getComputedStyle(this._canvas).getPropertyValue('height');
     };
 
     /**
@@ -263,7 +263,7 @@ export class WritingPanel {
      * @returns {string}
      */
     getPanelWidth = (): string => {
-        return window.getComputedStyle(this._canvas).getPropertyPriority('width');
+        return window.getComputedStyle(this._canvas).getPropertyValue('width');
     };
 
     /**

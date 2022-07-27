@@ -94,7 +94,7 @@ export class WritingPanel {
          * @returns {string}
          */
         this.getPanelHeight = () => {
-            return window.getComputedStyle(this._canvas).getPropertyPriority('height');
+            return window.getComputedStyle(this._canvas).getPropertyValue('height');
         };
         /**
          * 设置写字板的宽度
@@ -111,7 +111,7 @@ export class WritingPanel {
          * @returns {string}
          */
         this.getPanelWidth = () => {
-            return window.getComputedStyle(this._canvas).getPropertyPriority('width');
+            return window.getComputedStyle(this._canvas).getPropertyValue('width');
         };
         /**
          * 设置线条宽度
@@ -404,8 +404,8 @@ export class WritingPanel {
         }
         const rect = this._canvas.getBoundingClientRect();
         const point = {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
+            x: (evt.clientX - rect.left) * (this._canvas.width / parseFloat(this.getPanelWidth())),
+            y: (evt.clientY - rect.top) * (this._canvas.height / parseFloat(this.getPanelHeight()))
         };
         point.x = point.x / this._panelConfig.scale;
         point.y = point.y / this._panelConfig.scale;
