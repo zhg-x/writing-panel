@@ -305,7 +305,7 @@ export class LineRecord {
         return lines.length ? lines[lines.length - 1] : undefined;
     }
     /** 获取可用的线条列表 */
-    getUsableLine() {
+    getUsableLines() {
         return this.lineList.filter(d => d.usable);
     }
     /**
@@ -317,7 +317,7 @@ export class LineRecord {
     }
     /** 线条记录是否为空 */
     isEmpty() {
-        return !!this.lineList.length;
+        return !this.lineList.length;
     }
     /** 清空已记录的线条信息 */
     empty() {

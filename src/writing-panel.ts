@@ -23,6 +23,8 @@ export class WritingPanel {
     private readonly _Writing = 2;
     /** 鼠标松开[事件标志] */
     private readonly _Up = 3;
+    /** 是否处于移动端环境下 */
+    private readonly _isMobilePlatform: boolean;
 
     /** 面板配置选项 */
     private _panelConfig: PanelConfig;
@@ -48,6 +50,7 @@ export class WritingPanel {
         this._canvas = canvas;
         this._context = this._canvas.getContext('2d')!;
         this._panelConfig = new PanelConfig(options);
+        this._isMobilePlatform = isMobilePlatform();
         this._initPanel();
     }
 
@@ -148,7 +151,11 @@ export class WritingPanel {
      */
     private _strokeWrite(event: ElementEvents, eventFlag: number): void {
         event.preventDefault();
-        const evt = (isMobilePlatform() && 'touches' in event && event.touches && event.touches[0]) ? event.touches[0] : event;
+        let evt: ElementEvents | Touch = event;
+        if (this._isMobilePlatform) {
+            const touchEvt = event as TouchEvent;
+            evt = touchEvt.changedTouches[0]
+        }
         const rect = this._canvas.getBoundingClientRect();
         const point: Point = {
             x: (evt as any).clientX - rect.left,
@@ -415,7 +422,7 @@ export class WritingPanel {
         if (clearPanelBgcFlag) {
             this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
         }
-        const usableLines = this._lineRecord.getUsableLine();
+        const usableLines = this._lineRecord.getUsableLines();
         if (usableLines.length < 1) {
             console.warn('lineRewrite() ==> 暂无可重绘的线条');
             return;
@@ -493,6 +500,10 @@ export class WritingPanel {
         rmOnResizeEventListener && window.removeEventListener('resize', this._windowOnResize);
     };
 
+    /** 判断面板是否为空 */
+    isEmpty = (): boolean => {
+        return this._lineRecord.getUsableLines().length === 0;
+    }
 
     /**
      * 销毁

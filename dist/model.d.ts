@@ -225,7 +225,7 @@ export declare class LineRecord {
      */
     findLastUsableLine(): Line | undefined;
     /** 获取可用的线条列表 */
-    getUsableLine(): Line[];
+    getUsableLines(): Line[];
     /**
      * 查找第一个被禁用/不可用的线条
      * @returns Line|null 查找到则返回线条，查找不到则返回undefined

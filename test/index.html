@@ -65,6 +65,7 @@
         <button onclick="revoke()">撤销</button>
         <button onclick="recover()">恢复</button>
         <button onclick="destroy()">销毁</button>
+        <button onclick="panelIsEmpty()">面板是否为空</button>
     </div>
 
     <script>
@@ -133,6 +134,9 @@
         }
         function destroy() {
             writingPanel.destroy();
+        }
+        function panelIsEmpty() {
+            alert(writingPanel.isEmpty())
         }
     </script>
 </body>

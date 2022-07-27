@@ -9,6 +9,8 @@ export declare class WritingPanel {
     private readonly _Writing;
     /** 鼠标松开[事件标志] */
     private readonly _Up;
+    /** 是否处于移动端环境下 */
+    private readonly _isMobilePlatform;
     /** 面板配置选项 */
     private _panelConfig;
     /** 画布元素 */
@@ -174,6 +176,8 @@ export declare class WritingPanel {
      * @param {boolean} rmOnResizeEventListener 是否移除窗口onresize事件监听，默认为false
      */
     private _removeAllEvtListeners;
+    /** 判断面板是否为空 */
+    isEmpty: () => boolean;
     /**
      * 销毁
      * <p>使用同等宽高的canvas替换现有的canvas</p>

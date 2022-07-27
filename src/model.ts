@@ -466,7 +466,7 @@ export class LineRecord {
     }
 
     /** 获取可用的线条列表 */
-    getUsableLine(): Line[] {
+    getUsableLines(): Line[] {
         return this.lineList.filter(d => d.usable);
     }
 
@@ -480,7 +480,7 @@ export class LineRecord {
 
     /** 线条记录是否为空 */
     isEmpty(): boolean {
-        return !!this.lineList.length;
+        return !this.lineList.length;
     }
 
     /** 清空已记录的线条信息 */
