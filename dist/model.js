@@ -30,7 +30,7 @@ export class PanelConfig {
         this.imgType = _options.imgType || 'png';
         this.cursorStyle = _options.cursorStyle;
         this._autoResize = _options.autoResize !== false;
-        this._enableDPR = !!_options.enableDPR;
+        this._enableDPR = Boolean(_options.enableDPR);
         this.scale = this.enableDPR ? window.devicePixelRatio : 1;
     }
     get scale() {
@@ -115,11 +115,11 @@ export class PanelConfig {
     }
     /** 启用浏览器窗口缩放时重置面板功能 */
     get autoResize() {
-        return !!this._autoResize;
+        return this._autoResize;
     }
     /** 启用设别像素比 window.devicePixelRatio */
     get enableDPR() {
-        return !!this._enableDPR;
+        return this._enableDPR;
     }
 }
 /**

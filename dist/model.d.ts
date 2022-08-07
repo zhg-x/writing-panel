@@ -23,10 +23,15 @@ export declare class PanelConfigOption {
     width?: number | string;
     /** 面板高度，值为number类型或者可以转换为有效数值的string类型 */
     height?: number | string;
+    /** 面板背景色 */
     panelBgColor?: string;
+    /** 线条宽度 */
     lineWidth?: number;
+    /** 线帽样式 */
     lineCap?: CanvasLineCap;
+    /** 线条交汇处边角的类型 */
     lineJoin?: CanvasLineJoin;
+    /** 图片类型 */
     imgType?: ImgType;
     /** 鼠标移动到面板区域时的光标样式 */
     cursorStyle?: any;
@@ -68,7 +73,7 @@ export declare class PanelConfig {
     /** 浏览器窗口改变时是否重置面板 */
     private readonly _autoResize;
     /** 启用设备像素比 window.devicePixelRatio */
-    private readonly _enableDPR?;
+    private readonly _enableDPR;
     constructor(options: PanelConfigOption);
     get scale(): number;
     set scale(value: number);

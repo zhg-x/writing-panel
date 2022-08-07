@@ -74,8 +74,7 @@ export class WritingPanel {
      * </ul>
      */
     private _resetCanvas = (): void => {
-        if (this._initialized && (!this._panelConfig.enableDPR ||
-            this._panelConfig.enableDPR && this._panelConfig.scale === window.devicePixelRatio)) {
+        if (this._initialized && !this._panelConfig.autoResize) {
             return;
         }
         if (this._panelConfig.enableDPR) {
@@ -84,7 +83,7 @@ export class WritingPanel {
         this._canvas.width = this._panelConfig.width; // 设置写字板的宽度和高度
         this._canvas.height = this._panelConfig.height;
         this._context.scale(this._panelConfig.scale, this._panelConfig.scale); // 设置缩放
-        this.setPanelBgColor(); // 初始化时设置写字板背景色
+        this.clearPanel(); // 重置画布时，清空面板内容
         this.setPanelCursorStyle();
         this._initialized && console.log(`检测到窗口大小改变，面板已重置.`);
         this._initialized = true;
@@ -208,7 +207,7 @@ export class WritingPanel {
     /**
      * 设置面板背景色
      * @param color 颜色值，默认值为null，使用PanelConfig.panelBgColor属性值
-     * @param lineRewriteFlag {boolean} 线条重绘标志
+     * @param lineRewriteFlag {boolean} 线条重绘标志，默认值为 false
      * @returns WritingPanel 当前面板实例对象
      */
     setPanelBgColor(color: any = null, lineRewriteFlag = false): WritingPanel {
@@ -312,7 +311,7 @@ export class WritingPanel {
     /**
      * 清除面板内容 (包括面板上的线条和背景色)
      * @param clearRecordFlag {boolean} 是否清除线条记录，默认值为 true.
-     * @param resetPanelBgcFlag 是否清除面板背景色，默认值为 true.
+     * @param resetPanelBgcFlag {boolean} 是否重置面板背景色，默认值为 true.
      */
     clearPanel = (clearRecordFlag = true, resetPanelBgcFlag = true): void => {
         if (clearRecordFlag) {
@@ -321,7 +320,7 @@ export class WritingPanel {
             this._lineIndex = 0; // 将线条索引置0
         }
         this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
-        resetPanelBgcFlag && this.setPanelBgColor();
+        resetPanelBgcFlag && this.setPanelBgColor(); // 清空面板上时判断是否需要设置背景色
     };
 
     /**

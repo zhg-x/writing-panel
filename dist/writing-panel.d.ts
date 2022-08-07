@@ -66,7 +66,7 @@ export declare class WritingPanel {
     /**
      * 设置面板背景色
      * @param color 颜色值，默认值为null，使用PanelConfig.panelBgColor属性值
-     * @param lineRewriteFlag {boolean} 线条重绘标志
+     * @param lineRewriteFlag {boolean} 线条重绘标志，默认值为 false
      * @returns WritingPanel 当前面板实例对象
      */
     setPanelBgColor(color?: any, lineRewriteFlag?: boolean): WritingPanel;
@@ -124,7 +124,7 @@ export declare class WritingPanel {
     /**
      * 清除面板内容 (包括面板上的线条和背景色)
      * @param clearRecordFlag {boolean} 是否清除线条记录，默认值为 true.
-     * @param resetPanelBgcFlag 是否清除面板背景色，默认值为 true.
+     * @param resetPanelBgcFlag {boolean} 是否重置面板背景色，默认值为 true.
      */
     clearPanel: (clearRecordFlag?: boolean, resetPanelBgcFlag?: boolean) => void;
     /**

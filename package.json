@@ -1,6 +1,6 @@
 {
   "name": "writing-panel",
-  "version": "0.0.1-1",
+  "version": "0.0.1-2",
   "description": "Writing and painting panel tools",
   "main": "./dist/index.js",
   "scripts": {
