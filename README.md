@@ -8,12 +8,13 @@ JS 实现写字板功能
 - 设置面板样式(面板大小/线条宽度及颜色/线帽样式/...)
 - 支持线条撤销和恢复
 - 图片保存/下载
-- 获取Base64字符串
-- 获取Blob|File对象
+- 获取`Base64`字符串
+- 获取`Blob|File`对象
 - 开启/关闭面板蒙层
 - 销毁
 - ......
 
+---
 
 ## Installation
 
@@ -30,6 +31,8 @@ $ npm i writing-panel
 <script src="bundle.js"></script>
  ```
 
+---
+
 ## Usages
 
 ### PanelConfigOption-面板配置项
@@ -43,8 +46,9 @@ $ npm i writing-panel
 - PanelConfigOption.imgType: 图片类型
 - PanelConfigOption.cursorStyle: 鼠标移动到面板区域时的光标样式
 - PanelConfigOption.autoResize: 浏览器窗口改变时是否重置面板，默认为true
-- PanelConfigOption.enableDPR: 是否启用设备像素比 window.devicePixelRatio，如果开始此选项，则在设置画布/面板的width和height属性值时，需要根据设备像素比进行计算，默认为false。
+- PanelConfigOption.enableDPR: 是否启用设备像素比 `window.devicePixelRatio`，如果开始此选项，则在设置画布/面板的width和height属性值时，需要根据设备像素比进行计算，默认为`false`。
 
+---
 
 ### 书写面板组件类
 
@@ -55,140 +59,292 @@ const writingPanel = new WritingPanel(canvasElement, panelConfigOption);
 ```
 
 参数：
-- canvasElement: HTMLCanvasElement，canvas画布元素 
-- options: PanelConfigOption，面板参数配置对象的实例
+- `canvasElement`: `HTMLCanvasElement`，canvas画布元素 
+- `options`: `PanelConfigOption`，面板参数配置对象的实例
 
-#### 实例方法
+---
 
-```typescript
-class WritingPanel {
-    
-    /**
-     * 设置面板背景色
-     * @param color 颜色值，默认值为null，使用PanelConfig.panelBgColor属性值
-     * @param lineRewriteFlag {boolean} 线条重绘标志，默认值为 false
-     * @returns WritingPanel 当前面板实例对象
-     */
-    setPanelBgColor(color?: any, lineRewriteFlag?: boolean): WritingPanel;
-    /** 获取当前面板的背景色 */
-    getPanelBgColor(): string | undefined;
-    /**
-     * 设置写字板高度
-     * @param height {number} 高度值
-     * @returns 当前写字板实例对象
-     */
-    setPanelHeight: (height: number) => WritingPanel;
-    /**
-     * 获取面板的高度
-     * <p>获取计算后的综合的高度值</p>
-     * @returns {string} 单位：px
-     */
-    getPanelHeight: () => string;
-    /**
-     * 设置写字板的宽度
-     * @param width {number} 宽度值
-     * @returns 当前写字板实例对象
-     */
-    setPanelWidth: (width: number) => WritingPanel;
-    /**
-     * 获取面板的宽度
-     * <p>获取计算后的综合的宽度值</p>
-     * @returns {string} 单位：px
-     */
-    getPanelWidth: () => string;
-    /**
-     * <p>还原面板原始宽高比例
-     * <p>在设置了面板的宽度或高度后，可以使用此方法对面板宽度或高度进行还原</p>
-     * @param rstWidth {boolean} 还原面板宽度，默认为true
-     * @param rstHeight {boolean} 还原面板高度，默认为true
-     */
-    restorePanelWH: (rstWidth?: boolean, rstHeight?: boolean) => void;
-    /**
-     * 设置线条宽度
-     * @param width {number} 线条宽度
-     * @returns 当前写字板实例对象
-     */
-    setLineWidth: (width: number) => WritingPanel;
-    /**
-     * 设置线条线帽的样式
-     * @param value 样式值
-     * @returns 当前写字板实例对象
-     */
-    setLineCap: (value: CanvasLineCap) => WritingPanel;
-    /**
-     * 设置线条颜色
-     * @param color {string} 颜色值
-     * @returns 当前写字板实例对象
-     */
-    setLineColor: (color: string) => WritingPanel;
-    /**
-     * 清除面板内容 (包括面板上的线条和背景色)
-     * @param clearRecordFlag {boolean} 是否清除线条记录，默认值为 true.
-     * @param resetPanelBgcFlag {boolean} 是否重置面板背景色，默认值为 true.
-     */
-    clearPanel: (clearRecordFlag?: boolean, resetPanelBgcFlag?: boolean) => void;
-    /**
-     * 获取画布的Base64编码字符串
-     */
-    getBase64: () => string;
-    /**
-     * 获取画布的Blob|File对象
-     * @param type {string} [可选]类型：'blob'|'file'，默认值为blob
-     * @param fileName [可选] 文件名称
-     */
-    getImgBlobOrFile: (type?: 'blob' | 'file', fileName?: string) => Promise<Blob | File>;
-    /**
-     * 保存图片
-     * <p>功能同downloadImgFile()方法</p>
-     * <p>下载结束后可使用.then()方法执行其它相关操作</p>
-     * @param fileName 图片文件名称，如果不传则使用随机文件名称
-     */
-    saveImgFile: (fileName?: string) => Promise<any>;
-    /**
-     * 下载图片
-     * <p>功能同saveImgFile()方法</p>
-     * <p>下载结束后可使用.then()方法执行其它相关操作</p>
-     * @param fileName 图片文件名称
-     */
-    downloadImgFile: (fileName?: string) => Promise<any>;
-    /**
-     * <p>撤销/单步撤销操作</p>
-     * <p>设置最后一个线条为不可用状态，然后清空画布，根据剩下的可用状态的线条重新绘制</p>
-     */
-    revoke: () => void;
-    /**
-     * 恢复撤销操作
-     */
-    recover: () => void;
-    /**
-     * 设置面板区域的光标样式
-     * @param cursorStyle {string} 光标样式
-     */
-    setPanelCursorStyle: (cursorStyle?: any) => void;
-    /**
-     * 移除所有事件监听
-     * @param {boolean} rmOnResizeEventListener 是否移除窗口onresize事件监听，默认为false
-     */
-    private _removeAllEvtListeners;
-    /** 判断面板是否为空 */
-    isEmpty: () => boolean;
-    /**
-     * 销毁
-     * <p>使用同等宽高的canvas替换现有的canvas</p>
-     */
-    destroy: () => void;
-    /**
-     * 开启蒙层
-     * <p>仅针对当前面板容器的范围设置蒙层，当面板容器的大小发生变化时，蒙层大小不会随之而改变</p>
-     */
-    openMask: () => void;
-    /**
-     * 关闭蒙层
-     */
-    closeMask: () => void;
-}
+#### 设置面板背景色
 
+```ts
+writingPanel.setPanelBgColor(color);
 ```
+
+参数：
+- `color` 颜色值，默认值为`null`，使用`PanelConfig.panelBgColor`属性值
+
+返回：
+- `writingPanel` - 当前面板实例对象
+
+---
+
+#### 获取当前面板的背景色
+
+```ts
+writingPanel.getPanelBgColor();
+```
+
+返回：
+- `string` | `undefined`
+
+---
+
+#### 设置写字板高度
+
+```ts
+writingPanel.setPanelHeight(height);
+```
+
+参数：
+- `height`：`number`类型
+
+返回：
+- `writingPanel`-当前写字板实例对象
+
+---
+
+#### 获取写字板的高度
+
+```ts
+writingPanel.getPanelHeight();
+```
+
+获取计算后的面板元素的综合高度值
+
+返回：
+- 高度值，`string`类型，单位：`px`
+
+---
+
+#### 设置写字板的宽度
+
+```ts
+writingPanel.setPanelWidth(width);
+```
+
+参数：
+- `width`：`number`类型
+
+返回：
+- `writingPanel`-当前写字板实例对象
+
+---
+
+#### 获取写字板的宽度
+
+```ts
+writingPanel.getPanelWidth();
+```
+
+获取计算后的面板元素的综合宽度值
+
+返回：
+- 宽度值，`string`类型，单位：`px`
+
+---
+
+#### 还原面板原始宽高比例
+
+```ts
+writingPanel.restorePanelWH(rstWidth, rstHeight);
+```
+
+还原面板原始宽高比例。在设置了面板的宽度或高度后，可以使用此方法对面板宽度或高度进行还原。
+
+参数：
+- `rstWidth`: `boolean`，还原面板宽度，默认值为 `true`。
+- `rstHeight`: `boolean`，还原面板高度，默认值为 `true`。
+
+返回：
+- `void`
+
+---
+
+#### 设置线条宽度
+
+```ts
+writingPanel.setLineWidth(width);
+```
+
+参数：
+- `width`: `number` 类型
+
+返回：
+- `writingPanel` - 当前写字板实例对象
+
+---
+
+#### 设置线条线帽的样式
+
+```ts
+writingPanel.setLineCap(value);
+```
+
+参数：
+- `value`: `CanvasLineCap` 类型
+
+返回：
+- `writingPanel` - 当前写字板实例对象
+
+---
+
+#### 设置线条颜色
+
+```ts
+writingPanel.setLineColor(color);
+```
+
+参数：
+- `color`: `string` 类型
+
+返回：
+- `writingPanel` - 当前写字板实例对象
+
+---
+
+#### 清除面板内容
+
+```ts
+writingPanel.clearPanel(clearRecordFlag, resetPanelBgcFlag);
+```
+
+参数：
+- `clearRecordFlag`: `boolean`类型，是否清除线条记录，默认值为 `true`.
+- `resetPanelBgcFlag`: `boolean`类型，是否重置面板背景色，默认值为 `true`.
+
+---
+
+#### 获取画布的Base64编码字符串
+
+```ts
+writingPanel.getBase64();
+```
+
+返回：
+- base64编码字符串
+
+---
+
+#### 获取画布的Blob|File对象
+
+```ts
+writingPanel.getImgBlobOrFile(type, fileName);
+```
+
+参数：
+- type: `string`类型，有两种可选类型(`blob`|`file`)，默认值为`blob`，可选。
+- fileName: `string`，文件名称，可选。
+
+返回
+- `Promise`: `Promise<Blob | File>`
+
+---
+
+#### 保存图片
+
+```ts
+writingPanel.saveImgFile(fileName);
+```
+
+功能同`downloadImgFile()`方法，返回值为`Promise`类型，下载结束后可使用`.then()`方法执行其它相关操作。
+
+参数：
+- `fileName`: 图片文件名称，如果不传则使用随机文件名称
+
+返回：
+- `Promise`: `Promise<any>`
+
+---
+
+#### 下载图片
+
+```ts
+writingPanel.downloadImgFile(fileName);
+```
+
+功能同`功能同saveImgFile()`方法，返回值为`Promise`类型，下载结束后可使用`.then()`方法执行其它相关操作。
+
+参数：
+- `fileName`: 图片文件名称，如果不传则使用随机文件名称
+
+返回：
+- `Promise`: `Promise<any>`
+
+---
+
+#### 撤销/单步撤销操作
+
+```ts
+writingPanel.revoke();
+```
+
+---
+
+#### 恢复撤销操作
+
+```ts
+writingPanel.recover();
+```
+
+---
+
+#### 设置面板区域的光标样式
+
+```ts
+writingPanel.setPanelCursorStyle(cursorStyle);
+```
+
+参数：
+- `cursorStyle`: `string`类型，光标样式
+
+返回：
+- `void`
+
+---
+
+#### 判断面板是否为空
+
+```ts
+writingPanel.isEmpty();
+```
+
+返回：
+- `boolean`
+
+---
+
+#### 销毁
+
+```ts
+writingPanel.destroy();
+```
+
+返回：
+- `void`
+
+---
+
+#### 开启蒙层
+
+```ts
+writingPanel.openMask();
+```
+
+仅针对当前面板容器的范围设置蒙层，当面板容器的大小发生变化时，蒙层大小不会随之而改变。
+
+返回：
+- `void`
+
+---
+
+#### 关闭蒙层
+
+```ts
+writingPanel.closeMask();
+```
+
+返回：
+- `void`
 
 ---
 
