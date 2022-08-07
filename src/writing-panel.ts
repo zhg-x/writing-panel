@@ -250,7 +250,7 @@ export class WritingPanel {
 
     /**
      * 设置写字板的宽度
-     * @param width {number} 线条宽度
+     * @param width {number} 宽度值
      * @returns 当前写字板实例对象
      */
     setPanelWidth = (width: number): WritingPanel => {
@@ -535,5 +535,52 @@ export class WritingPanel {
         this._removeAllEvtListeners(true);
         console.log('destroy() ==> 写字板[canvas]已销毁.');
     };
+
+    /** 蒙层元素的ID */
+    private _maskId?: string;
+
+    /**
+     * 开启蒙层
+     * <p>仅针对当前面板容器的范围设置蒙层，当面板容器的大小发生变化时，蒙层大小不会随之而改变</p>
+     */
+    openMask = (): void => {
+        if (this._maskId && document.getElementById(this._maskId)) {
+            console.warn(`蒙层已存在，请勿重复创建蒙层!`);
+            return;
+        }
+        // 获取画布元素的父元素
+        const parentElement = this._canvas.parentElement!;
+        // 创建一个新元素以做蒙层div使用
+        const maskElement = document.createElement('div');
+        // 将蒙层div插入到现有的canvas之前
+        parentElement.insertBefore(maskElement, this._canvas);
+        // 设置蒙层div的样式
+        this._maskId = 'maskId_' + Math.random().toString().replace('.', '');
+        maskElement.id = this._maskId;
+        parentElement.style.position = 'relative';
+        maskElement.style.position = 'absolute'; // 蒙层元素相对于其父元素是绝对定位，需要将其设置为绝对定位，其父元素设置为相对定位
+        const paddingTop = getComputedStyle(parentElement).getPropertyValue('padding-top');
+        const paddingLeft = getComputedStyle(parentElement).getPropertyValue('padding-left');
+        maskElement.style.top = paddingTop;
+        maskElement.style.left = paddingLeft;
+        maskElement.style.width = Math.max(parseFloat(this.getPanelWidth()), this._canvas.offsetWidth) + 'px';
+        maskElement.style.height = Math.max(parseFloat(this.getPanelHeight()), this._canvas.offsetHeight) + 'px';
+        maskElement.style.backgroundColor = '#bfbfbf';
+        maskElement.style.opacity = '0.3'; // 指定蒙层透明度
+        maskElement.style.cursor = 'pointer'; // 指定鼠标指针放在蒙层上的光标形状
+    }
+
+    /**
+     * 关闭蒙层
+     */
+    closeMask = (): void => {
+        if (this._maskId && document.getElementById(this._maskId)) {
+            document.getElementById(this._maskId)!.remove();
+            this._maskId = ''; // 蒙层元素从DOM树中移除后，将蒙层id置空
+            console.log(`蒙层已关闭!`);
+        } else {
+            console.warn(`未检测到蒙层!`);
+        }
+    }
 
 }

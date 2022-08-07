@@ -86,7 +86,7 @@ export declare class WritingPanel {
     getPanelHeight: () => string;
     /**
      * 设置写字板的宽度
-     * @param width {number} 线条宽度
+     * @param width {number} 宽度值
      * @returns 当前写字板实例对象
      */
     setPanelWidth: (width: number) => WritingPanel;
@@ -190,4 +190,15 @@ export declare class WritingPanel {
      * <p>使用同等宽高的canvas替换现有的canvas</p>
      */
     destroy: () => void;
+    /** 蒙层元素的ID */
+    private _maskId?;
+    /**
+     * 开启蒙层
+     * <p>仅针对当前面板容器的范围设置蒙层，当面板容器的大小发生变化时，蒙层大小不会随之而改变</p>
+     */
+    openMask: () => void;
+    /**
+     * 关闭蒙层
+     */
+    closeMask: () => void;
 }

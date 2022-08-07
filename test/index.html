@@ -84,6 +84,8 @@
         <button onclick="recover()">恢复</button>
         <button onclick="destroy()">销毁</button>
         <button onclick="panelIsEmpty()">面板是否为空</button>
+        <button onclick="openMask()">开启蒙层</button>
+        <button onclick="closeMask()">关闭蒙层</button>
     </div>
 
     <script>
@@ -99,7 +101,7 @@
             const canvas = document.getElementById("canvas-0");
             writingPanel = new WritingPanel(canvas, {
                 height: 240,
-                width: '600',
+                width: '500',
                 lineWidth: lineWidthElement.value,
                 imgType: 'png',
                 autoResize: '',
@@ -173,6 +175,14 @@
 
         function panelIsEmpty() {
             alert(writingPanel.isEmpty())
+        }
+
+        function openMask() {
+            writingPanel.openMask();
+        }
+
+        function closeMask() {
+            writingPanel.closeMask();
         }
     </script>
 </body>
