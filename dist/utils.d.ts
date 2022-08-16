@@ -25,8 +25,9 @@ export declare function isMobilePlatform(): boolean;
  * <p>根据是否是移动端环境来过滤事件</p>
  * <p>如果是移动端环境，则过滤出touch开头的事件名，否则过滤出mouse开头的事件名称</p>
  * @param eventNames 事件名称数组
+ * @param filterFlag 是否根据浏览器运行环境过滤事件
  */
-export declare function filterEvents(eventNames: Array<string>): Array<string>;
+export declare function filterEvents(eventNames: Array<string>, filterFlag?: boolean): Array<string>;
 /**
  * 获取日期格式化字符串
  * @param date 日期

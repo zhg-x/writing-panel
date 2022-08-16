@@ -91,11 +91,11 @@ export class WritingPanel {
 
     /** 设置事件监听 */
     private _setEventListeners(): void {
-        filterEvents(DownEvents).forEach(evtName => {
+        filterEvents(DownEvents, this._panelConfig.eventFilterFlag).forEach(evtName => {
             this._canvas.addEventListener(evtName, this._readyWriteFun);
         });
         // 当以下事件被触发时停止书写操作
-        filterEvents(UpEvents).forEach((evtName) => {
+        filterEvents(UpEvents, this._panelConfig.eventFilterFlag).forEach((evtName) => {
             this._canvas.addEventListener(evtName, this._stopWriting);
         });
     }
@@ -110,7 +110,7 @@ export class WritingPanel {
      * @param event Events
      */
     private _readyWriteFun = (event: ElementEvents): void => {
-        filterEvents(MoveEvents).forEach(evtName => {
+        filterEvents(MoveEvents, this._panelConfig.eventFilterFlag).forEach(evtName => {
             this._canvas.addEventListener(evtName, this._writingFun);
         });
         this._writingFlag = true; // 鼠标按下表示开始在画布上进行书写/画线，将正在书写的标志置为true
@@ -151,7 +151,7 @@ export class WritingPanel {
     private _strokeWrite(event: ElementEvents, eventFlag: number): void {
         event.preventDefault();
         let evt: ElementEvents | Touch = event;
-        if (this._isMobilePlatform) {
+        if (this._isMobilePlatform || event.type.startsWith('touch')) {
             const touchEvt = event as TouchEvent;
             evt = touchEvt.changedTouches[0]
         }

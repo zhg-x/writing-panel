@@ -12,6 +12,10 @@ export const MoveEvents = ['mousemove', 'touchmove'];
  */
 export const UpEvents = ['mouseup', 'mouseleave', 'touchend', 'touchcancel'];
 export class PanelConfigOption {
+    constructor() {
+        /** 是否根据浏览器运行环境(PC端/移动端)区分事件 */
+        this.eventFilterFlag = false;
+    }
 }
 /**
  * 面板配置选项类
@@ -32,6 +36,7 @@ export class PanelConfig {
         this._autoResize = _options.autoResize !== false;
         this._enableDPR = Boolean(_options.enableDPR);
         this.scale = this.enableDPR ? window.devicePixelRatio : 1;
+        this.eventFilterFlag = Boolean(_options.eventFilterFlag);
     }
     get scale() {
         return this._scale || 1;
@@ -120,6 +125,12 @@ export class PanelConfig {
     /** 启用设别像素比 window.devicePixelRatio */
     get enableDPR() {
         return this._enableDPR;
+    }
+    get eventFilterFlag() {
+        return this._eventFilterFlag;
+    }
+    set eventFilterFlag(value) {
+        this._eventFilterFlag = value;
     }
 }
 /**

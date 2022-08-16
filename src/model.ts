@@ -50,6 +50,8 @@ export class PanelConfigOption {
      * <p>默认为false</p>
      */
     enableDPR?: boolean;
+    /** 是否根据浏览器运行环境(PC端/移动端)区分事件 */
+    eventFilterFlag?: boolean = false;
 }
 
 /**
@@ -83,6 +85,8 @@ export class PanelConfig {
     private readonly _autoResize: boolean;
     /** 启用设备像素比 window.devicePixelRatio */
     private readonly _enableDPR: boolean;
+    /** 是否根据浏览器运行环境(PC端/移动端)区分事件 */
+    private _eventFilterFlag!: boolean;
 
     constructor(options: PanelConfigOption) {
         const _options = isObject(options) ? options : {};
@@ -97,6 +101,7 @@ export class PanelConfig {
         this._autoResize = _options.autoResize !== false;
         this._enableDPR = Boolean(_options.enableDPR);
         this.scale = this.enableDPR ? window.devicePixelRatio : 1;
+        this.eventFilterFlag = Boolean(_options.eventFilterFlag);
     }
 
     get scale(): number {
@@ -209,6 +214,14 @@ export class PanelConfig {
     /** 启用设别像素比 window.devicePixelRatio */
     get enableDPR(): boolean {
         return this._enableDPR;
+    }
+
+    get eventFilterFlag(): boolean {
+        return this._eventFilterFlag;
+    }
+
+    set eventFilterFlag(value: boolean) {
+        this._eventFilterFlag = value;
     }
 }
 

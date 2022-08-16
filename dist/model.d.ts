@@ -43,6 +43,8 @@ export declare class PanelConfigOption {
      * <p>默认为false</p>
      */
     enableDPR?: boolean;
+    /** 是否根据浏览器运行环境(PC端/移动端)区分事件 */
+    eventFilterFlag?: boolean;
 }
 /**
  * 面板配置选项类
@@ -74,6 +76,8 @@ export declare class PanelConfig {
     private readonly _autoResize;
     /** 启用设备像素比 window.devicePixelRatio */
     private readonly _enableDPR;
+    /** 是否根据浏览器运行环境(PC端/移动端)区分事件 */
+    private _eventFilterFlag;
     constructor(options: PanelConfigOption);
     get scale(): number;
     set scale(value: number);
@@ -111,6 +115,8 @@ export declare class PanelConfig {
     get autoResize(): boolean;
     /** 启用设别像素比 window.devicePixelRatio */
     get enableDPR(): boolean;
+    get eventFilterFlag(): boolean;
+    set eventFilterFlag(value: boolean);
 }
 /**
  * 触点

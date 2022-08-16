@@ -48,7 +48,7 @@ export class WritingPanel {
          * @param event Events
          */
         this._readyWriteFun = (event) => {
-            filterEvents(MoveEvents).forEach(evtName => {
+            filterEvents(MoveEvents, this._panelConfig.eventFilterFlag).forEach(evtName => {
                 this._canvas.addEventListener(evtName, this._writingFun);
             });
             this._writingFlag = true; // 鼠标按下表示开始在画布上进行书写/画线，将正在书写的标志置为true
@@ -436,11 +436,11 @@ export class WritingPanel {
     }
     /** 设置事件监听 */
     _setEventListeners() {
-        filterEvents(DownEvents).forEach(evtName => {
+        filterEvents(DownEvents, this._panelConfig.eventFilterFlag).forEach(evtName => {
             this._canvas.addEventListener(evtName, this._readyWriteFun);
         });
         // 当以下事件被触发时停止书写操作
-        filterEvents(UpEvents).forEach((evtName) => {
+        filterEvents(UpEvents, this._panelConfig.eventFilterFlag).forEach((evtName) => {
             this._canvas.addEventListener(evtName, this._stopWriting);
         });
     }
@@ -452,7 +452,8 @@ export class WritingPanel {
     _strokeWrite(event, eventFlag) {
         event.preventDefault();
         let evt = event;
-        if (this._isMobilePlatform) {
+        console.log(evt.type);
+        if (this._isMobilePlatform || event.type.startsWith('touch')) {
             const touchEvt = event;
             evt = touchEvt.changedTouches[0];
         }
