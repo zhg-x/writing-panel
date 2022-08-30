@@ -7,7 +7,8 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
         library: "writingPanel",
-        libraryTarget: "umd"
+        libraryTarget: "umd",
+        clean: true
     },
     resolve: {
         // Add `.ts` and `.tsx` as a resolvable extension.
